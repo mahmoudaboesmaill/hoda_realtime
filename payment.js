@@ -1,0 +1,180 @@
+"use strict";
+
+SITE.applyHeader();
+
+const paymentMethods = [
+  {
+    data: PHARMACY.payments.instapay,
+    className: "logo-instapay",
+    logoImg: "instapay_logo.png"
+  },
+  {
+    data: PHARMACY.payments.etisalatCash,
+    className: "logo-etisalat",
+    logoImg: "etisalat_logo.png"
+  },
+  {
+    data: PHARMACY.payments.vodafoneCash,
+    className: "logo-vodafone",
+    logoImg: "vodafone_cash_logo.png"
+  }
+];
+
+let toastTimer;
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  document.getElementById("toastText").textContent = message;
+  toast.classList.add("show");
+  window.clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function fallbackCopy(text) {
+  const helper = document.createElement("textarea");
+  helper.value = text;
+  helper.setAttribute("readonly", "");
+  helper.className = "clipboard-helper";
+  document.body.appendChild(helper);
+  helper.select();
+  helper.setSelectionRange(0, helper.value.length);
+
+  let copied = false;
+  try {
+    copied = document.execCommand("copy");
+  } finally {
+    helper.remove();
+  }
+
+  if (!copied) throw new Error("Clipboard fallback failed");
+}
+
+async function writeToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch (_error) {
+      // بعض المتصفحات ترفض Clipboard API؛ نستخدم البديل المتوافق أدناه.
+    }
+  }
+
+  fallbackCopy(text);
+}
+
+async function copyText(text, button) {
+  if (!text || text.includes("اكتب")) {
+    showToast("عذراً، لم يتم تحديد الرقم بعد");
+    return;
+  }
+
+  const label = button.querySelector(".btn-label");
+
+  try {
+    await writeToClipboard(text);
+    button.classList.add("copied");
+    label.textContent = "تم النسخ";
+    showToast("تم نسخ البيانات إلى الحافظة ✓");
+
+    window.setTimeout(() => {
+      button.classList.remove("copied");
+      label.textContent = "نسخ الرقم";
+    }, 2000);
+  } catch (_error) {
+    showToast("تعذر النسخ تلقائياً؛ يمكنك نسخه يدوياً");
+    window.prompt("انسخ الرقم يدوياً:", text);
+  }
+}
+
+function getMobilePlatform() {
+  const userAgent = navigator.userAgent || "";
+  const isIPadOS =
+    navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+
+  if (/Android/i.test(userAgent)) return "android";
+  if (/iPad|iPhone|iPod/i.test(userAgent) || isIPadOS) return "ios";
+  return "other";
+}
+
+async function openVodafoneOnIOS(event, payment, appLink) {
+  event.preventDefault();
+  appLink.setAttribute("aria-busy", "true");
+
+  try {
+    await writeToClipboard(payment.account);
+    showToast("تم نسخ رقم فودافون كاش؛ الصقه داخل التطبيق ✓");
+  } catch (_error) {
+    showToast("انسخ رقم المحفظة ثم الصقه داخل التطبيق");
+    window.prompt("انسخ رقم فودافون كاش:", payment.account);
+  } finally {
+    appLink.removeAttribute("aria-busy");
+    window.location.assign(payment.appUrl);
+  }
+}
+
+function configureVodafoneLink(payment, appLink) {
+  const platform = getMobilePlatform();
+
+  // فتح الرابط في نفس الصفحة يقلل التبويبات الوسيطة على الموبايل.
+  appLink.removeAttribute("target");
+  appLink.href = payment.appUrl;
+
+  if (platform === "android") {
+    return;
+  }
+
+  if (platform === "ios") {
+    appLink.addEventListener("click", (event) =>
+      openVodafoneOnIOS(event, payment, appLink)
+    );
+  }
+}
+
+const container = document.getElementById("paymentCardsList");
+const template = document.getElementById("paymentCardTemplate");
+
+paymentMethods.forEach((method) => {
+  const payment = method.data;
+  if (!payment || !payment.account) return;
+
+  const analyticsMethodName = {
+    instapay: "instapay",
+    etisalatCash: "etisalat_cash",
+    vodafoneCash: "vodafone_cash"
+  }[payment.id] || "payment";
+
+  const fragment = template.content.cloneNode(true);
+  const logoBox = fragment.querySelector(".payment-logo");
+  const logo = fragment.querySelector(".payment-logo img");
+  const actions = fragment.querySelector(".payment-actions");
+  const copyButton = fragment.querySelector(".btn-copy");
+  const appLink = fragment.querySelector(".btn-app");
+
+  copyButton.dataset.analyticsEvent = `${analyticsMethodName}_copy_click`;
+  appLink.dataset.analyticsEvent = `${analyticsMethodName}_open_click`;
+
+  logoBox.classList.add(method.className);
+  logo.src = payment.logo || method.logoImg;
+  logo.alt = payment.label;
+  fragment.querySelector(".payment-name").textContent = payment.label;
+  fragment.querySelector(".payment-note").textContent =
+    payment.note || "تحويل إلكتروني";
+  fragment.querySelector(".account-holder").textContent =
+    payment.nameHolder || "الحساب الرسمي";
+  fragment.querySelector(".account-number").textContent = payment.account;
+
+  copyButton.addEventListener("click", () => copyText(payment.account, copyButton));
+
+  if (payment.appUrl) {
+    if (payment.id === "vodafoneCash") {
+      configureVodafoneLink(payment, appLink);
+    } else {
+      appLink.href = payment.appUrl;
+    }
+  } else {
+    appLink.remove();
+    actions.classList.add("single");
+  }
+
+  container.appendChild(fragment);
+});

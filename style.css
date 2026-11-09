@@ -1,0 +1,1170 @@
+:root {
+  /* ألوان الهوية المستوحاة من شعار مؤسسة سيد عبيد المتكاملة (ElHoda & RT Tech) */
+  --brand-navy: #061124;
+  --brand-navy-dark: #030914;
+  --brand-navy-light: #152c52;
+
+  --brand-red: #d61a1e;
+  --brand-red-dark: #b01216;
+  --brand-red-light: #fef2f2;
+
+  --brand-gold: #eaaf37;
+  --brand-gold-dark: #b47812;
+  --brand-gold-light: #fef8eb;
+
+  /* متغيرات متوافقة مع الهيكل الأساسي */
+  --brand-cyan: #eaaf37;
+  --brand-cyan-dark: #b47812;
+  --brand-cyan-light: #fef8eb;
+  --brand-teal: #d61a1e;
+  --accent-red: #d61a1e;
+  --accent-green: #10b981;
+  --accent-green-bg: #ecfdf5;
+
+  --bg-page: #f4f6f9;
+  --bg-card: #ffffff;
+  --text-main: #061124;
+  --text-muted: #52637a;
+
+  --border-color: #e2e8f0;
+  --border-hover: #DFC38A;
+
+  --shadow-sm: 0 4px 14px rgba(6, 17, 36, 0.05);
+  --shadow-md: 0 10px 28px rgba(6, 17, 36, 0.09);
+  --shadow-lg: 0 16px 36px rgba(6, 17, 36, 0.14);
+
+  --radius-xl: 28px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  font-family: Tahoma, Arial, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #eef2f7 0%, #f8fafc 45%, #ffffff 100%);
+  color: var(--text-main);
+  direction: rtl;
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  width: min(520px, 100%);
+  margin: 0 auto;
+  padding: 18px 16px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================
+   الهيدر وبطاقة الشعار (Hero Section)
+   ========================================= */
+.hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 24px 20px 22px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--brand-navy) 0%, var(--brand-red) 50%, var(--brand-gold) 100%);
+}
+
+.logo-wrap {
+  width: 112px;
+  height: 112px;
+  margin: 4px auto 14px;
+  border-radius: 50%;
+  padding: 3.5px;
+  background: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-red) 52%, var(--brand-navy) 100%);
+  box-shadow: 0 10px 24px rgba(6, 17, 36, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.logo-wrap:hover {
+  transform: scale(1.03);
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 4px;
+  display: block;
+}
+
+h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--brand-navy);
+  letter-spacing: -0.2px;
+  line-height: 1.35;
+}
+
+.brand-en {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--brand-red);
+  letter-spacing: 0.4px;
+  margin-top: 2px;
+  direction: ltr;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: var(--brand-gold-dark);
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+/* شارة الحالة (مفتوح الآن / مغلق الآن) */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-green-bg);
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-top: 10px;
+  transition: all 0.25s ease;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse 1.8s infinite;
+  flex-shrink: 0;
+}
+
+.badge-status.is-closed {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.badge-status.is-closed .pulse-dot {
+  background: var(--brand-red);
+  box-shadow: none;
+  animation: none;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* =========================================
+   زر الطلب والاستفسار عبر واتساب (WhatsApp CTA Banner)
+   ========================================= */
+.rx-banner {
+  background: linear-gradient(135deg, #061124 0%, #102548 58%, #a31317 100%);
+  border-radius: var(--radius-lg);
+  padding: 16px 16px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(6, 17, 36, 0.24);
+  margin-top: 8px;
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid rgba(234, 175, 55, 0.28);
+}
+
+.rx-banner:active {
+  transform: scale(0.98);
+}
+
+.rx-banner::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 140px;
+  height: 140px;
+  background: rgba(234, 175, 55, 0.16);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.rx-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(234, 175, 55, 0.18);
+  border: 1px solid rgba(234, 175, 55, 0.35);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--brand-gold);
+}
+
+.rx-text {
+  flex: 1;
+}
+
+.rx-text h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.rx-text p {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  color: #fde68a;
+  font-weight: 500;
+}
+
+.rx-arrow {
+  width: 34px;
+  height: 34px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
+/* =========================================
+   عناوين الأقسام والشبكة (Grid & Section)
+   ========================================= */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 4px 12px;
+}
+
+.section-title {
+  font-size: 17.5px;
+  font-weight: 800;
+  color: var(--brand-navy);
+  margin: 0;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(234, 175, 55, 0.5), var(--border-color));
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.tile {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 14px;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: var(--text-main);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  position: relative;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* إذا كان عدد البطاقات فرديًا، تمتد البطاقة الأخيرة بعرض العمودين بتناسق */
+.grid > .tile:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.tile:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.tile:active {
+  transform: scale(0.97);
+}
+
+.tile-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  transition: transform 0.2s;
+}
+
+.tile:hover .tile-icon-wrap {
+  transform: scale(1.08);
+}
+
+.tile b {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--brand-navy);
+}
+
+.tile span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+/* ألوان أيقونات التواصل المتناغمة مع الهوية */
+.bg-wa { background: #eafaf1; color: #25d366; }
+.bg-phone { background: var(--brand-gold-light); color: var(--brand-gold-dark); }
+.bg-fb { background: #ebf3ff; color: #1877f2; }
+.bg-ig { background: #fdf0f5; color: #e1306c; }
+.bg-tiktok { background: #f1f5f9; color: var(--brand-navy); }
+.bg-maps { background: var(--brand-red-light); color: var(--brand-red); }
+.bg-vcard { background: #eef2ff; color: var(--brand-navy-light); }
+
+/* =========================================
+   بطاقة العنوان (Address Card)
+   ========================================= */
+.card-address {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  margin: 8px 0 8px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.address-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--brand-red-light);
+  color: var(--brand-red);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.address-info {
+  flex: 1;
+}
+
+.address-info .label {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--brand-navy);
+}
+
+.address-info .value {
+  color: var(--text-muted);
+  font-size: 13.5px;
+  margin-top: 4px;
+  line-height: 1.55;
+}
+
+.btn-directions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  background: var(--brand-gold-light);
+  color: var(--brand-gold-dark);
+  border: 1px solid rgba(234, 175, 55, 0.35);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-directions:hover {
+  background: var(--brand-navy);
+  border-color: var(--brand-navy);
+  color: #fff;
+}
+
+/* =========================================
+   صفحة وبطاقات الدفع (Payment Cards)
+   ========================================= */
+.payment-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.payment-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-hover);
+}
+
+.payment-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.payment-logo {
+  width: 54px !important;
+  height: 54px !important;
+  min-width: 54px !important;
+  max-width: 54px !important;
+  min-height: 54px !important;
+  max-height: 54px !important;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden !important;
+  border: 1px solid var(--border-color);
+  background: #ffffff !important;
+  padding: 4px;
+}
+
+.payment-logo img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+.payment-logo.logo-instapay {
+  background: #ffffff !important;
+  padding: 4px;
+}
+
+.payment-logo.logo-etisalat {
+  background: #ffffff !important;
+  padding: 4px;
+}
+
+.payment-logo.logo-vodafone {
+  background: #ffffff !important;
+  padding: 3px;
+}
+
+.payment-logo.logo-vodafone img {
+  transform: scale(1.3);
+}
+
+.payment-details {
+  flex: 1;
+}
+
+.payment-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--brand-navy);
+}
+
+.payment-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* صندوق رقم الحساب للنسخ */
+.account-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.account-number {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--brand-navy);
+  letter-spacing: 1px;
+  direction: ltr;
+}
+
+.account-holder {
+  font-size: 12.5px;
+  color: var(--brand-red);
+  font-weight: 700;
+}
+
+/* أزرار الإجراءات */
+.payment-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.payment-actions.single {
+  grid-template-columns: 1fr;
+}
+
+.btn {
+  border: 0;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-copy {
+  background: var(--brand-gold-light);
+  color: var(--brand-gold-dark);
+  border: 1px solid rgba(234, 175, 55, 0.4);
+}
+
+.btn-copy:hover {
+  background: var(--brand-gold);
+  color: var(--brand-navy);
+}
+
+.btn-copy.copied {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: #a7f3d0;
+}
+
+.btn-app {
+  background: var(--brand-navy);
+  color: #ffffff;
+}
+
+.btn-app:visited {
+  color: #ffffff;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-app:hover {
+    background: var(--brand-navy-light);
+  }
+}
+
+/* بطاقة الإرشادات والتنبيه */
+.notice-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-top: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  color: #78350f;
+}
+
+.notice-box svg {
+  color: var(--brand-gold-dark);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.notice-box p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+/* =========================================
+   صفحة البوابة الرئيسية (Index Landing Portal)
+   ========================================= */
+.portal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  color: var(--text-main);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.portal-card::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--brand-gold);
+  transition: width 0.2s;
+}
+
+.portal-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.portal-card:hover::before {
+  width: 8px;
+}
+
+.portal-card.payment-portal::before {
+  background: var(--brand-red);
+}
+
+.portal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--brand-gold-light);
+  color: var(--brand-gold-dark);
+}
+
+.portal-card.payment-portal .portal-icon {
+  background: var(--brand-red-light);
+  color: var(--brand-red);
+}
+
+.portal-text {
+  flex: 1;
+}
+
+.portal-text h2 {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 800;
+  color: var(--brand-navy);
+}
+
+.portal-text p {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.portal-arrow {
+  width: 32px;
+  height: 32px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-navy);
+  flex-shrink: 0;
+}
+
+/* شريط الوصول السريع (Quick Bottom Bar) */
+.quick-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.quick-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--brand-navy);
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.quick-btn:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.quick-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* =========================================
+   الفوتر وتنبيه النسخ (Footer & Toast)
+   ========================================= */
+.footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(30px);
+  background: var(--brand-navy);
+  color: #ffffff;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(6, 17, 36, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(234, 175, 55, 0.3);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.section-header-spaced {
+  margin-top: 22px;
+}
+
+.portal-card-flush {
+  margin-bottom: 10px;
+}
+
+.portal-card-top {
+  margin-top: 16px;
+}
+
+.clipboard-helper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* =========================================
+   Responsive – كل أحجام الشاشات
+   ========================================= */
+
+@media (max-width: 359px) {
+  .wrap {
+    padding: 12px 10px 32px;
+  }
+  h1 {
+    font-size: 17px;
+  }
+  .subtitle {
+    font-size: 12.5px;
+  }
+  .badge-status {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+  .hero {
+    padding: 18px 14px 16px;
+    border-radius: 20px;
+  }
+  .logo-wrap {
+    width: 88px;
+    height: 88px;
+  }
+  .grid {
+    gap: 8px;
+  }
+  .tile {
+    padding: 12px 6px;
+  }
+  .tile b {
+    font-size: 13px;
+  }
+  .tile span {
+    font-size: 11px;
+  }
+  .tile-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    margin-bottom: 8px;
+  }
+}
+
+/* صفحة الدفع على الموبايل: إظهار وسائل الدفع من أول الشاشة */
+@media (max-width: 520px) {
+  .payment-page .wrap {
+    padding: 10px 10px 28px;
+  }
+
+  .payment-page .hero {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-areas:
+      "logo title"
+      "logo en"
+      "logo subtitle"
+      "logo badge";
+    column-gap: 12px;
+    row-gap: 0;
+    align-items: center;
+    padding: 14px 14px 12px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    text-align: right;
+  }
+
+  .payment-page .hero::before {
+    height: 4px;
+  }
+
+  .payment-page .hero .logo-wrap {
+    grid-area: logo;
+    width: 72px;
+    height: 72px;
+    margin: 0;
+    padding: 3px;
+  }
+
+  .payment-page .hero h1 {
+    grid-area: title;
+    font-size: 15.5px;
+    line-height: 1.25;
+  }
+
+  .payment-page .hero .brand-en {
+    grid-area: en;
+    font-size: 11px;
+    margin-top: 1px;
+    text-align: right;
+  }
+
+  .payment-page .hero .subtitle {
+    grid-area: subtitle;
+    margin: 2px 0 0;
+    font-size: 11.5px;
+    line-height: 1.25;
+  }
+
+  .payment-page .hero .badge-status {
+    grid-area: badge;
+    justify-self: start;
+    gap: 5px;
+    margin-top: 5px;
+    padding: 2px 9px;
+    font-size: 10.5px;
+    line-height: 1.25;
+  }
+
+  .payment-page .hero .pulse-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .payment-page .section-header {
+    gap: 6px;
+    margin: 8px 2px;
+  }
+
+  .payment-page .section-title {
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  .payment-page .payment-card {
+    padding: 14px 12px;
+    margin-bottom: 11px;
+    border-radius: 18px;
+  }
+
+  .payment-page .payment-header {
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .payment-page .payment-logo {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+    min-height: 46px !important;
+    max-height: 46px !important;
+    border-radius: 12px;
+    padding: 3px;
+  }
+
+  .payment-page .payment-name {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+
+  .payment-page .payment-note {
+    margin-top: 2px;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .payment-page .account-box {
+    min-height: 46px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 11px;
+  }
+
+  .payment-page .account-holder {
+    font-size: 11.5px;
+    line-height: 1.2;
+  }
+
+  .payment-page .account-number {
+    font-size: 16.5px;
+    line-height: 1.2;
+  }
+
+  .payment-page .payment-actions {
+    gap: 8px;
+  }
+
+  .payment-page .payment-actions .btn {
+    min-height: 40px;
+    padding: 9px 10px;
+    border-radius: 11px;
+    gap: 6px;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+}
+
+/* صفحة التواصل على الموبايل: إظهار كروت التواصل من أول الشاشة */
+@media (max-width: 520px) {
+  .contact-page .wrap {
+    padding: 10px 10px 28px;
+  }
+
+  .contact-page .hero {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-areas:
+      "logo title"
+      "logo en"
+      "logo subtitle"
+      "logo badge";
+    column-gap: 12px;
+    row-gap: 0;
+    align-items: center;
+    padding: 14px 14px 11px;
+    margin-bottom: 8px;
+    border-radius: 20px;
+    text-align: right;
+  }
+
+  .contact-page .hero::before {
+    height: 4px;
+  }
+
+  .contact-page .hero .logo-wrap {
+    grid-area: logo;
+    width: 72px;
+    height: 72px;
+    margin: 0;
+    padding: 3px;
+  }
+
+  .contact-page .hero h1 {
+    grid-area: title;
+    font-size: 15.5px;
+    line-height: 1.25;
+  }
+
+  .contact-page .hero .brand-en {
+    grid-area: en;
+    font-size: 11px;
+    margin-top: 1px;
+    text-align: right;
+  }
+
+  .contact-page .hero .subtitle {
+    grid-area: subtitle;
+    margin: 2px 0 0;
+    font-size: 11.5px;
+    line-height: 1.25;
+  }
+
+  .contact-page .hero .badge-status {
+    grid-area: badge;
+    justify-self: start;
+    gap: 5px;
+    margin-top: 5px;
+    padding: 2px 9px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .contact-page .hero .pulse-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .contact-page .section-header {
+    gap: 6px;
+    margin: 6px 2px 8px;
+  }
+
+  .contact-page .section-title {
+    font-size: 14.5px;
+    line-height: 1.3;
+  }
+
+  .contact-page .grid {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .contact-page .tile {
+    min-height: 86px;
+    padding: 10px 8px;
+    border-radius: 15px;
+  }
+
+  .contact-page .tile-icon-wrap {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 6px;
+    border-radius: 12px;
+  }
+
+  .contact-page .tile-icon-wrap svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .contact-page .tile b {
+    font-size: 13.5px;
+    line-height: 1.2;
+  }
+
+  .contact-page .tile span {
+    margin-top: 2px;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+}
+
+/* شاشات أكبر من الموبايل (فوق 520px) */
+@media (min-width: 521px) {
+  .wrap {
+    padding: 28px 20px 48px;
+  }
+  .hero {
+    padding: 28px 24px 24px;
+  }
+  h1 {
+    font-size: 23px;
+  }
+  .logo-wrap {
+    width: 120px;
+    height: 120px;
+  }
+  .portal-card {
+    padding: 22px 20px;
+  }
+}
