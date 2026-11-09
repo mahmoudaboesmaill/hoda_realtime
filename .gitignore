@@ -1,14 +1,14 @@
-# تجاهل مسودات وتصورات الشعارات غير المعتمدة وملفات العمل الداخلية
-new_brand_designs/
-prompt_flat_vector_suite/
-creative_unconstrained_concepts/
-modern_prompt_suite/
-smarthome_lighting_security_logos/
-FINAL_OFFICIAL_BRAND_KIT/
-SmartHome-*.png
-concept-*
-approved-logo-*
-854845433_*.jpg
-بيانات_العميل_المطلوبة.md
+# تجاهل مسودات وتصورات الشعارات غير المعتمدة وملفات العمل الداخلية في الجذر فقط
+/new_brand_designs/
+/prompt_flat_vector_suite/
+/creative_unconstrained_concepts/
+/modern_prompt_suite/
+/smarthome_lighting_security_logos/
+/FINAL_OFFICIAL_BRAND_KIT/
+/SmartHome-*.png
+/concept-*
+/approved-logo-*
+/854845433_*.jpg
+/بيانات_العميل_المطلوبة.md
 .DS_Store
 Thumbs.db
