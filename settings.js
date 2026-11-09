@@ -11,10 +11,10 @@ const PHARMACY = {
   activity: "حلول الكهرباء و الإضاءة و الأنظمة الذكية و المراقبة",
   tagline: "حلول ذكية لمستقبل أفضل",
 
-  // الشعار المعتمد
-  logo: "client_assets/logo/approved-logo-transparent.png",
-  logoOriginal: "client_assets/logo/approved-logo-original.webp",
-  favicon: "client_assets/logo/approved-logo-symbol-square.png",
+  // الشعار المعتمد النهائي (Ultimate Merged Brand Kit)
+  logo: "client_assets/logo/ultimate-avatar-cropped.png",
+  logoOriginal: "client_assets/logo/ultimate-logo-transparent.png",
+  favicon: "client_assets/logo/ultimate-icon-square.png",
 
   // مواعيد العمل (كل يوم من 9 صباحًا حتى 2 بعد منتصف الليل ما عدا الجمعة إجازة)
   hours: {

@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="42%" r="75%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="55%" stop-color="#F8F9FB"/>
+      <stop offset="100%" stop-color="#ECEFF4"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD000"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF2A2A"/>
+      <stop offset="50%" stop-color="#E31B23"/>
+      <stop offset="100%" stop-color="#B00E14"/>
+    </linearGradient>
+    <radialGradient id="glassGrad" cx="45%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#253852"/>
+      <stop offset="60%" stop-color="#0C1726"/>
+      <stop offset="100%" stop-color="#050A12"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="1600" fill="url(#bgGrad)"/>
+
+  <!-- 1. Dual Symmetric Wi-Fi Signal Waves Above Roof Slopes -->
+  <path d="M 526,204 A 95,95 0 0 1 620,136 M 552,220 A 62,62 0 0 1 614,175 M 578,236 A 28,28 0 0 1 607,214
+           M 1074,204 A 95,95 0 0 0 980,136 M 1048,220 A 62,62 0 0 0 986,175 M 1022,236 A 28,28 0 0 0 993,214"
+        fill="none" stroke="#0F223D" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- 2. Smart-Home Roof (Golden Left Slope with Fin + Crimson Right Slope with Pillar + Inner Bevel Ceiling) -->
+  <path d="M 800,135 L 435,342 L 538,285 L 615,172 L 580,262 L 800,135 Z" fill="url(#goldGrad)"/>
+  <path d="M 800,135 L 430,345 L 448,378 L 800,180 Z" fill="url(#goldGrad)"/>
+  <path d="M 800,135 L 1165,345 L 1147,378 L 1105,354 L 1105,638 L 1066,618 L 1066,332 L 800,180 Z" fill="url(#redGrad)"/>
+  <path d="M 800,198 L 495,372 L 512,400 L 800,235 L 1048,376 L 1048,605 L 1072,618 L 1072,358 Z" fill="#0F223D"/>
+
+  <!-- 3. Left Chamber: Golden Smart Power Button (⏻) + L-Arm + 'H' -->
+  <path d="M 610,362 A 76,76 0 1 0 676,362" fill="none" stroke="url(#goldGrad)" stroke-width="26" stroke-linecap="round"/>
+  <line x1="643" y1="322" x2="643" y2="412" stroke="url(#goldGrad)" stroke-width="26" stroke-linecap="round"/>
+  <path d="M 643,502 L 643,546 Q 643,562 659,562 L 752,562" fill="none" stroke="url(#goldGrad)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 596,592 L 628,592 L 628,638 L 678,638 L 678,592 L 710,592 L 710,715 L 678,715 L 678,666 L 628,666 L 628,715 L 596,715 Z" fill="url(#goldGrad)"/>
+
+  <!-- 4. Center Axis: Golden Vertical PCB Tree + Central T-Pillar & Lower Micro-Circuit Traces -->
+  <path d="M 800,542 L 800,268 M 800,322 L 828,295 L 856,295 M 800,348 L 766,315 L 736,315 M 800,425 L 826,398 L 826,356 M 800,455 L 772,428 L 772,365 M 800,502 L 828,476 L 828,452 M 778,542 L 778,526 L 766,514 L 726,514 M 822,542 L 822,512 L 848,486"
+        fill="none" stroke="url(#goldGrad)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="url(#goldGrad)">
+    <circle cx="800" cy="268" r="10.5"/><circle cx="856" cy="295" r="9.5"/><circle cx="736" cy="315" r="9.5"/>
+    <circle cx="826" cy="356" r="10.5"/><circle cx="772" cy="365" r="10.5"/><circle cx="828" cy="452" r="9.5"/>
+    <circle cx="726" cy="514" r="9.5"/><circle cx="848" cy="486" r="9.5"/>
+  </g>
+  <rect x="762" y="548" width="76" height="22" fill="#0F223D"/>
+  <rect x="788" y="566" width="24" height="172" fill="#0F223D"/>
+  <path d="M 784,580 L 758,608 L 740,608 M 784,618 L 768,634 L 768,678 M 784,650 L 752,650 L 752,664 M 816,580 L 834,598 L 834,622"
+        fill="none" stroke="#0F223D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#0F223D">
+    <circle cx="740" cy="608" r="8"/><circle cx="768" cy="678" r="8"/><circle cx="752" cy="664" r="8"/><circle cx="834" cy="622" r="8"/>
+  </g>
+
+  <!-- 5. Right Chamber: Concentric Security Camera Lens + Visor + Arm + 'RT' -->
+  <path d="M 944,502 L 944,546 Q 944,562 928,562 L 848,562" fill="none" stroke="#0F223D" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 874,368 A 96,96 0 0 1 1014,368" fill="none" stroke="#0F223D" stroke-width="15" stroke-linecap="round"/>
+  <circle cx="944" cy="434" r="82" fill="#0B1829" stroke="#0F223D" stroke-width="6"/>
+  <circle cx="944" cy="434" r="56" fill="url(#redGrad)"/>
+  <circle cx="944" cy="434" r="32" fill="url(#glassGrad)" stroke="#050B14" stroke-width="4"/>
+  <circle cx="934" cy="424" r="10.5" fill="#FFFFFF"/>
+  <text x="945" y="715" text-anchor="middle" font-family="'Arial Black', 'Montserrat', sans-serif" font-weight="900" font-size="146" fill="url(#redGrad)">RT</text>
+
+  <!-- 6. Sweeping Golden Cradling Hand + 3 Sculpted Crimson Fingers -->
+  <path d="M 526,408 C 542,525 585,695 660,735 C 708,760 765,745 812,735 C 835,730 842,762 812,775 C 770,792 738,795 735,815 C 732,835 790,872 952,865 C 978,863 982,882 955,892 C 835,922 680,900 592,812 C 505,725 462,565 466,442 Z"
+        fill="url(#goldGrad)"/>
+  <path d="M 785,826 C 810,805 842,796 854,804 C 864,812 835,834 805,844 Z
+           M 832,844 C 858,822 894,812 906,820 C 916,828 885,850 852,858 Z
+           M 884,856 C 912,836 948,828 960,836 C 970,844 938,864 904,868 Z"
+        fill="url(#redGrad)"/>
+
+  <!-- 7. Bilingual Typography Block -->
+  <text x="800" y="1032" text-anchor="middle" font-family="'Century Gothic', 'Montserrat', sans-serif" font-weight="bold" font-size="80">
+    <tspan fill="url(#redGrad)">ELHODA </tspan><tspan fill="#0F223D">&amp; RT TECH</tspan>
+  </text>
+  <text x="800" y="1090" text-anchor="middle" font-family="'Bahnschrift', 'Segoe UI', sans-serif" font-weight="bold" font-size="27" letter-spacing="6.5" fill="#2C3545">
+    MODERN LIGHTING &amp; SECURITY SYSTEMS
+  </text>
+
+  <!-- Divider Line + Diamond -->
+  <line x1="380" y1="1126" x2="768" y2="1126" stroke="#551A2332" stroke-width="2"/>
+  <line x1="832" y1="1126" x2="1220" y2="1126" stroke="#551A2332" stroke-width="2"/>
+  <polygon points="800,1111 815,1126 800,1141 785,1126" fill="url(#redGrad)"/>
+  <polygon points="800,1118 808,1126 800,1134 792,1126" fill="url(#goldGrad)"/>
+
+  <!-- Arabic Branding -->
+  <text x="800" y="1215" text-anchor="middle" font-family="'Sakkal Majalla', 'Cairo', 'Traditional Arabic', sans-serif" font-weight="bold" font-size="82" fill="#0F223D">
+    مؤسسة سيد عبيد المتكاملة
+  </text>
+  <text x="800" y="1298" text-anchor="middle" font-family="'Sakkal Majalla', 'Cairo', 'Traditional Arabic', sans-serif" font-weight="bold" font-size="50" fill="url(#redGrad)">
+    الإضاءة الحديثة والمنزل الذكي وأنظمة الأمان
+  </text>
+  <text x="800" y="1376" text-anchor="middle" font-family="'Sakkal Majalla', 'Cairo', 'Traditional Arabic', sans-serif" font-weight="bold" font-size="54" fill="url(#goldGrad)">
+    حلول ذكية لمستقبل أفضل
+  </text>
+</svg>
