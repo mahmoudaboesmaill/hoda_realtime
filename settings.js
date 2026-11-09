@@ -45,7 +45,7 @@ const PHARMACY = {
 
   // حسابات التواصل الاجتماعي
   facebookUrl: "https://www.facebook.com/share/1EBi9rePNh/",
-  instagramUrl: "https://www.instagram.com/sayedebiedd?utm_source=qr&vrfl=MWExNmM3bGV4enpr",
+  instagramUrl: "https://www.instagram.com/sayedebiedelc?mdxt=MWwwYXh3MTdhOW5wdA==",
   tiktokUrl: "https://www.tiktok.com/@sayed.ebied1",
   youtubeUrl: "",
 
