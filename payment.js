@@ -9,9 +9,9 @@ const paymentMethods = [
     logoImg: "instapay_logo.png"
   },
   {
-    data: PHARMACY.payments.cibBank,
-    className: "logo-bank",
-    logoImg: "cib_bank_logo.svg"
+    data: PHARMACY.payments.vodafoneCash,
+    className: "logo-vodafone",
+    logoImg: "vodafone_cash_logo.png"
   },
   {
     data: PHARMACY.payments.etisalatCash,
@@ -19,9 +19,9 @@ const paymentMethods = [
     logoImg: "etisalat_logo.png"
   },
   {
-    data: PHARMACY.payments.vodafoneCash,
-    className: "logo-vodafone",
-    logoImg: "vodafone_cash_logo.png"
+    data: PHARMACY.payments.cibBank,
+    className: "logo-bank",
+    logoImg: "cib_bank_logo.svg"
   }
 ];
 
