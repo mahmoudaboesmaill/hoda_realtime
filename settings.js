@@ -68,6 +68,25 @@ const PHARMACY = {
       logo: "instapay_logo.png",
       appUrl: "https://ipn.eg/S/syd.mahmoud/instapay/5gJ2be"
     },
+    cibBank: {
+      id: "cibBank",
+      label: "حساب البنك التجاري الدولي (CIB)",
+      account: "100072381631",
+      nameHolder: "البنك التجاري الدولي - مصر (رقم الحساب)",
+      note: "تحويل لحساب البنك عبر إنستاباي أو التحويل البنكي",
+      copyLabel: "نسخ رقم الحساب",
+      logo: "cib_bank_logo.svg",
+      appUrl: ""
+    },
+    etisalatCash: {
+      id: "etisalatCash",
+      label: "e& money (اتصالات كاش)",
+      account: "01115905060",
+      nameHolder: "محفظة إي آند كاش",
+      note: "تحويل لمحفظة اتصالات كاش",
+      logo: "etisalat_logo.png",
+      appUrl: "https://app.etisalat.eg/?appScreens=cash&appScreen=cash&extra=screenId:send_money;dial:01115905060"
+    },
     vodafoneCash: {
       id: "vodafoneCash",
       label: "Vodafone Cash (فودافون كاش)",

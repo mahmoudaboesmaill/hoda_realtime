@@ -9,6 +9,11 @@ const paymentMethods = [
     logoImg: "instapay_logo.png"
   },
   {
+    data: PHARMACY.payments.cibBank,
+    className: "logo-bank",
+    logoImg: "cib_bank_logo.svg"
+  },
+  {
     data: PHARMACY.payments.etisalatCash,
     className: "logo-etisalat",
     logoImg: "etisalat_logo.png"
@@ -62,13 +67,14 @@ async function writeToClipboard(text) {
   fallbackCopy(text);
 }
 
-async function copyText(text, button) {
+async function copyText(text, button, defaultLabel) {
   if (!text || text.includes("اكتب")) {
     showToast("عذراً، لم يتم تحديد الرقم بعد");
     return;
   }
 
   const label = button.querySelector(".btn-label");
+  const restoreLabel = defaultLabel || "نسخ الرقم";
 
   try {
     await writeToClipboard(text);
@@ -78,7 +84,7 @@ async function copyText(text, button) {
 
     window.setTimeout(() => {
       button.classList.remove("copied");
-      label.textContent = "نسخ الرقم";
+      label.textContent = restoreLabel;
     }, 2000);
   } catch (_error) {
     showToast("تعذر النسخ تلقائياً؛ يمكنك نسخه يدوياً");
@@ -139,6 +145,7 @@ paymentMethods.forEach((method) => {
 
   const analyticsMethodName = {
     instapay: "instapay",
+    cibBank: "cib_bank",
     etisalatCash: "etisalat_cash",
     vodafoneCash: "vodafone_cash"
   }[payment.id] || "payment";
@@ -148,7 +155,11 @@ paymentMethods.forEach((method) => {
   const logo = fragment.querySelector(".payment-logo img");
   const actions = fragment.querySelector(".payment-actions");
   const copyButton = fragment.querySelector(".btn-copy");
+  const copyLabelEl = copyButton.querySelector(".btn-label");
   const appLink = fragment.querySelector(".btn-app");
+
+  const defaultCopyLabel = payment.copyLabel || "نسخ الرقم";
+  if (copyLabelEl) copyLabelEl.textContent = defaultCopyLabel;
 
   copyButton.dataset.analyticsEvent = `${analyticsMethodName}_copy_click`;
   appLink.dataset.analyticsEvent = `${analyticsMethodName}_open_click`;
@@ -163,7 +174,9 @@ paymentMethods.forEach((method) => {
     payment.nameHolder || "الحساب الرسمي";
   fragment.querySelector(".account-number").textContent = payment.account;
 
-  copyButton.addEventListener("click", () => copyText(payment.account, copyButton));
+  copyButton.addEventListener("click", () =>
+    copyText(payment.account, copyButton, defaultCopyLabel)
+  );
 
   if (payment.appUrl) {
     if (payment.id === "vodafoneCash") {
