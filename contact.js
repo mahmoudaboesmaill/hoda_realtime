@@ -3,8 +3,6 @@
 SITE.applyHeader();
 
 document.getElementById("addressText").textContent = PHARMACY.address;
-document.getElementById("phoneLabel").textContent = PHARMACY.phone;
-document.getElementById("phoneTile").href = `tel:${PHARMACY.phone}`;
 document.getElementById("mapsTile").href = PHARMACY.mapsUrl;
 document.getElementById("directionsBtn").href = PHARMACY.mapsUrl;
 
@@ -44,17 +42,21 @@ if (tiktokLink) {
 
 function saveContact() {
   const fullName = PHARMACY.fullName || `${PHARMACY.name} - ${PHARMACY.englishName || ""}`.trim();
+  const phoneLines = Array.isArray(PHARMACY.phones) && PHARMACY.phones.length > 0
+    ? PHARMACY.phones.map((item) => `TEL;TYPE=WORK,VOICE:${item.number}`)
+    : [`TEL;TYPE=WORK,VOICE:${PHARMACY.phone}`];
+
   const vcard = [
     "BEGIN:VCARD",
     "VERSION:3.0",
     `FN:${fullName}`,
     `ORG:${fullName}`,
     `TITLE:${PHARMACY.activity || "حلول الكهرباء والإضاءة والأنظمة الذكية والمراقبة"}`,
-    `TEL;TYPE=WORK,VOICE:${PHARMACY.phone}`,
+    ...phoneLines,
     `TEL;TYPE=CELL,VOICE,MSG:+${PHARMACY.whatsapp}`,
     `ADR;TYPE=WORK:;;${PHARMACY.address};;;;`,
     `URL:${PHARMACY.mapsUrl}`,
-    `NOTE:${PHARMACY.tagline || "حلول ذكية لمستقبل أفضل"} - ${PHARMACY.owner || "سيد عبيد"}`,
+    `NOTE:${PHARMACY.tagline || "حلول ذكية لمستقبل أفضل"} | الإدارة: 01009770070 | المبيعات: 01007802888 | خدمة العملاء: 01115905060`,
     "END:VCARD"
   ].join("\r\n");
 
