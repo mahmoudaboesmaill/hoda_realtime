@@ -36,6 +36,7 @@
 
 - **العنوان:** طريق المنصورية، الكوبري البحري، بجوار مسجد أولاد سالم، أبو رواش، كرداسة، الجيزة.
 - **رابط خرائط جوجل:** [Google Maps Location](https://maps.app.goo.gl/axVzn7anTFBvDVs88?g_st=aw)
+- **تقييم المؤسسة على جوجل:** [Google Review](https://search.google.com/local/writereview?placeid=ChIJ86eVXsZEWBQRqdmi7RaqEBI)
 - **مواعيد العمل:** يومياً من الساعة 9:00 صباحاً حتى 2:00 بعد منتصف الليل (ما عدا الجمعة إجازة).
 
 ---

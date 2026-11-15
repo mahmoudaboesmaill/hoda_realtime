@@ -49,8 +49,23 @@ assert(config.whatsappChannelUrl === "https://whatsapp.com/channel/0029VazVH2UJE
 assert(config.whatsappCommunityUrl === "https://chat.whatsapp.com/FSXZUBufabQDfGXla405NH", "رابط مجتمع واتساب مهيأ بشكل صحيح في settings.js");
 
 const contactHtml = fs.readFileSync("contact.html", "utf8");
+const paymentHtml = fs.readFileSync("payment.html", "utf8");
 assert(contactHtml.includes("https://whatsapp.com/channel/0029VazVH2UJENy3XmIKaa2I") && contactHtml.includes("للعملاء"), "بطاقة قناة واتساب وملاحظة (للعملاء) موجودة في contact.html");
 assert(contactHtml.includes("https://chat.whatsapp.com/FSXZUBufabQDfGXla405NH") && contactHtml.includes("للمتخصصين"), "بطاقة مجتمع واتساب وملاحظة (للمتخصصين) موجودة في contact.html");
+assert(
+  config.googleReviewUrl === "https://search.google.com/local/writereview?placeid=ChIJ86eVXsZEWBQRqdmi7RaqEBI",
+  "رابط تقييم جوجل (Google Review) مهيأ بشكل صحيح في settings.js"
+);
+assert(
+  contactHtml.includes('id="googleReviewBtn"') &&
+    contactHtml.includes("https://search.google.com/local/writereview?placeid=ChIJ86eVXsZEWBQRqdmi7RaqEBI"),
+  "بطاقة تقييم جوجل المميزة موجودة في contact.html"
+);
+assert(
+  paymentHtml.includes('id="googleReviewBtn"') &&
+    paymentHtml.includes("https://search.google.com/local/writereview?placeid=ChIJ86eVXsZEWBQRqdmi7RaqEBI"),
+  "بطاقة تقييم جوجل المميزة موجودة في payment.html"
+);
 
 // 3. فحص بيانات الدفع في settings.js
 const payments = config.payments;

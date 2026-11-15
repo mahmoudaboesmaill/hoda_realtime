@@ -19,6 +19,15 @@ if (directionsBtn && config.mapsUrl) {
   directionsBtn.href = config.mapsUrl;
 }
 
+const googleReviewBtn = document.getElementById("googleReviewBtn");
+if (googleReviewBtn) {
+  if (config.googleReviewUrl) {
+    googleReviewBtn.href = config.googleReviewUrl;
+  } else {
+    googleReviewBtn.hidden = true;
+  }
+}
+
 const encodedMessage = encodeURIComponent(
   config.whatsappMessage || "السلام عليكم كنت حابب أستفسر عن"
 );

@@ -50,9 +50,10 @@ const SITE_CONFIG = {
   // البريد الإلكتروني (إن وجد)
   email: "",
 
-  // العنوان ورابط الموقع على Google Maps
+  // العنوان ورابط الموقع على Google Maps وتقييم جوجل
   address: "طريق المنصورية، الكوبري البحري ، بجوار مسجد أولاد سالم، أبو رواش ،كرداسة، الجيزة.",
   mapsUrl: "https://maps.app.goo.gl/axVzn7anTFBvDVs88?g_st=aw",
+  googleReviewUrl: "https://search.google.com/local/writereview?placeid=ChIJ86eVXsZEWBQRqdmi7RaqEBI",
 
   // حسابات التواصل الاجتماعي ومجتمعات واتساب
   whatsappChannelUrl: "https://whatsapp.com/channel/0029VazVH2UJENy3XmIKaa2I",

@@ -134,6 +134,7 @@ checkDomElements("contact.html", [
   "igTile",
   "tiktokTile",
   "mapsTile",
+  "googleReviewBtn",
   "whatsappOrderBtn",
   "addressText",
   "directionsBtn"
@@ -143,6 +144,7 @@ checkDomElements("payment.html", [
   "businessName",
   "businessEnglishName",
   "paymentCardsList",
+  "googleReviewBtn",
   "toast",
   "toastText",
   "paymentCardTemplate"

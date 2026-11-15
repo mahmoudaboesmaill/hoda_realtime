@@ -623,3 +623,12 @@ if (container && template) {
     container.appendChild(fragment);
   });
 }
+
+const googleReviewBtn = document.getElementById("googleReviewBtn");
+if (googleReviewBtn) {
+  if (config.googleReviewUrl) {
+    googleReviewBtn.href = config.googleReviewUrl;
+  } else {
+    googleReviewBtn.hidden = true;
+  }
+}
