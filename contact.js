@@ -53,6 +53,24 @@ if (Array.isArray(config.whatsappBranches)) {
   }
 }
 
+const whatsappChannelLink = document.getElementById("waChannelTile");
+if (whatsappChannelLink) {
+  if (config.whatsappChannelUrl) {
+    whatsappChannelLink.href = config.whatsappChannelUrl;
+  } else {
+    whatsappChannelLink.hidden = true;
+  }
+}
+
+const whatsappCommunityLink = document.getElementById("waCommunityTile");
+if (whatsappCommunityLink) {
+  if (config.whatsappCommunityUrl) {
+    whatsappCommunityLink.href = config.whatsappCommunityUrl;
+  } else {
+    whatsappCommunityLink.hidden = true;
+  }
+}
+
 const facebookLink = document.getElementById("fbTile");
 if (facebookLink) {
   if (config.facebookUrl) {

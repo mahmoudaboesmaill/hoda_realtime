@@ -127,6 +127,8 @@ checkDomElements("contact.html", [
   "whatsappList",
   "waSalesBtn",
   "waSupportBtn",
+  "waChannelTile",
+  "waCommunityTile",
   "saveContactBtn",
   "fbTile",
   "igTile",

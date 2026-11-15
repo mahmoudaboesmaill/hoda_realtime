@@ -40,8 +40,10 @@
 
 ---
 
-## 📱 حسابات التواصل الاجتماعي
+## 📱 حسابات التواصل الاجتماعي ومجتمعات واتساب
 
+- **قناة واتساب (مخصصة للعملاء):** [WhatsApp Channel](https://whatsapp.com/channel/0029VazVH2UJENy3XmIKaa2I)
+- **مجتمع واتساب (مخصص للمتخصصين):** [WhatsApp Community](https://chat.whatsapp.com/FSXZUBufabQDfGXla405NH)
 - **إنستجرام:** [Instagram Profile](https://www.instagram.com/sayedebiedelc?mdxt=MWwwYXh3MTdhOW5wdA==)
 - **فيسبوك:** [Facebook Page](https://www.facebook.com/share/1EBi9rePNh/)
 - **تيك توك:** [TikTok Profile](https://www.tiktok.com/@sayed.ebied1)

@@ -55,7 +55,9 @@ const SITE_CONFIG = {
   address: "طريق المنصورية، الكوبري البحري ، بجوار مسجد أولاد سالم، أبو رواش ،كرداسة، الجيزة.",
   mapsUrl: "https://maps.app.goo.gl/axVzn7anTFBvDVs88?g_st=aw",
 
-  // حسابات التواصل الاجتماعي
+  // حسابات التواصل الاجتماعي ومجتمعات واتساب
+  whatsappChannelUrl: "https://whatsapp.com/channel/0029VazVH2UJENy3XmIKaa2I",
+  whatsappCommunityUrl: "https://chat.whatsapp.com/FSXZUBufabQDfGXla405NH",
   facebookUrl: "https://www.facebook.com/share/1EBi9rePNh/",
   instagramUrl: "https://www.instagram.com/sayedebiedelc?mdxt=MWwwYXh3MTdhOW5wdA==",
   tiktokUrl: "https://www.tiktok.com/@sayed.ebied1",

@@ -45,6 +45,12 @@ assert(expectedWaUrl.startsWith("https://wa.me/201009770070?text="), "تنسيق
 assert(Array.isArray(config.whatsappBranches) && config.whatsappBranches.length === 2, "كارت الواتساب مهيأ بخانتين فقط في settings.js");
 assert(config.whatsappBranches[0].number === "01007802888" && config.whatsappBranches[0].whatsapp === "201007802888", "الخانة الأولى في كارت الواتساب مخصصة لـ 01007802888");
 assert(config.whatsappBranches[1].number === "01115905060" && config.whatsappBranches[1].whatsapp === "201115905060", "الخانة الثانية في كارت الواتساب مخصصة لـ 01115905060");
+assert(config.whatsappChannelUrl === "https://whatsapp.com/channel/0029VazVH2UJENy3XmIKaa2I", "رابط قناة واتساب مهيأ بشكل صحيح في settings.js");
+assert(config.whatsappCommunityUrl === "https://chat.whatsapp.com/FSXZUBufabQDfGXla405NH", "رابط مجتمع واتساب مهيأ بشكل صحيح في settings.js");
+
+const contactHtml = fs.readFileSync("contact.html", "utf8");
+assert(contactHtml.includes("https://whatsapp.com/channel/0029VazVH2UJENy3XmIKaa2I") && contactHtml.includes("للعملاء"), "بطاقة قناة واتساب وملاحظة (للعملاء) موجودة في contact.html");
+assert(contactHtml.includes("https://chat.whatsapp.com/FSXZUBufabQDfGXla405NH") && contactHtml.includes("للمتخصصين"), "بطاقة مجتمع واتساب وملاحظة (للمتخصصين) موجودة في contact.html");
 
 // 3. فحص بيانات الدفع في settings.js
 const payments = config.payments;
