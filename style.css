@@ -57,25 +57,52 @@ button:focus-visible,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  html {
+    scroll-behavior: auto;
   }
+
+  /* إيقاف نبض النقطة المتحركة مع الحفاظ على ظهورها ولون الحالة */
   .pulse-dot {
-    animation: none !important;
+    animation: none;
+    box-shadow: none;
   }
+
+  /* تعطيل التحريك الانتقالي للعناصر التفاعلية مع الحفاظ على تغير الألوان والحدود فورياً */
+  .logo-wrap,
+  .tile-icon-wrap,
+  .rx-banner,
+  .call-card,
+  .call-branch,
+  .tile,
+  .btn-directions,
+  .payment-card,
+  .btn,
+  .portal-card,
+  .portal-card::before,
+  .quick-btn,
+  .badge-status {
+    transition: none;
+  }
+
+  /* تعطيل تحريك البطاقات عند التمرير (hover) والتصغير عند الضغط (active) */
   .logo-wrap:hover,
   .tile:hover,
+  .tile:hover .tile-icon-wrap,
   .call-branch:hover,
   .portal-card:hover,
   .quick-btn:hover,
   .rx-banner:active,
+  .call-branch:active,
+  .tile:active,
   .btn:active {
-    transform: none !important;
+    transform: none;
+  }
+
+  /* تعطيل حركة انزلاق الـ toast مع الحفاظ على ظهوره واختفائه بشكل فوري وواضح */
+  .toast,
+  .toast.show {
+    transition: none;
+    transform: translateX(-50%);
   }
 }
 
@@ -818,6 +845,60 @@ h3.payment-name {
   .btn-app:hover {
     background: var(--brand-navy-light);
   }
+}
+
+/* منطقة الإرشاد والبديل التفاعلي لفتح التطبيق أو المتجر */
+.payment-fallback {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--brand-gold-light);
+  border: 1px solid rgba(138, 88, 6, 0.35);
+  border-radius: var(--radius-sm);
+  color: var(--brand-navy);
+}
+
+.payment-fallback[hidden] {
+  display: none !important;
+}
+
+.payment-fallback-text {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--brand-navy);
+}
+
+.payment-fallback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn-fallback-store {
+  flex: 1 1 140px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--brand-navy);
+  color: #ffffff;
+  border: 1px solid var(--brand-navy);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-fallback-store:visited {
+  color: #ffffff;
+}
+
+.btn-fallback-store:hover {
+  background: var(--brand-navy-light);
+  border-color: var(--brand-navy-light);
 }
 
 /* بطاقة الإرشادات والتنبيه */

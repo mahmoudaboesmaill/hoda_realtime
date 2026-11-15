@@ -2,7 +2,7 @@
 
 SITE.applyHeader();
 
-const config = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : (typeof PHARMACY !== "undefined" ? PHARMACY : {});
+const config = SITE.getConfig();
 
 const addressEl = document.getElementById("addressText");
 if (addressEl && config.address) {
@@ -20,10 +20,10 @@ if (directionsBtn && config.mapsUrl) {
 }
 
 const encodedMessage = encodeURIComponent(
-  config.whatsappMessage || config.prescriptionMsg || "السلام عليكم كنت حابب أستفسر عن"
+  config.whatsappMessage || "السلام عليكم كنت حابب أستفسر عن"
 );
 
-const whatsappBtn = document.getElementById("whatsappOrderBtn") || document.getElementById("rxBtn");
+const whatsappBtn = document.getElementById("whatsappOrderBtn");
 if (whatsappBtn && config.whatsapp) {
   whatsappBtn.href = `https://wa.me/${config.whatsapp}?text=${encodedMessage}`;
 }
@@ -99,19 +99,6 @@ if (tiktokLink) {
   } else {
     tiktokLink.hidden = true;
   }
-}
-
-/**
- * دالة لمعالجة النصوص الخاصة بـ vCard لضمان توافق المعايير (RFC 2426)
- * تقوم بعمل escaping للفواصل والفواصل المنقوطة والشرطات المائلة والأسطر الجديدة
- */
-function escapeVCardValue(str) {
-  if (!str) return "";
-  return String(str)
-    .replace(/\\/g, "\\\\")
-    .replace(/;/g, "\\;")
-    .replace(/,/g, "\\,")
-    .replace(/\r?\n/g, "\\n");
 }
 
 /**

@@ -3,7 +3,6 @@
 const SITE = {
   getConfig() {
     if (typeof SITE_CONFIG !== "undefined") return SITE_CONFIG;
-    if (typeof PHARMACY !== "undefined") return PHARMACY;
     return {};
   },
 
@@ -103,10 +102,10 @@ const SITE = {
 
   applyHeader() {
     const config = this.getConfig();
-    const nameEl = document.getElementById("businessName") || document.getElementById("pharmacyName");
+    const nameEl = document.getElementById("businessName");
     const enNameEl = document.getElementById("businessEnglishName");
-    const taglineEl = document.getElementById("businessTagline") || document.getElementById("pharmacyTagline");
-    const statusEl = document.getElementById("businessStatus") || document.getElementById("pharmacyStatus");
+    const taglineEl = document.getElementById("businessTagline");
+    const statusEl = document.getElementById("businessStatus");
     const badgeEl = document.getElementById("statusBadge");
     const logoImgs = document.querySelectorAll(".logo-img");
 
@@ -135,7 +134,7 @@ const SITE = {
 // تحديث حالة العمل تلقائيًا كل دقيقة
 window.addEventListener("DOMContentLoaded", () => {
   window.setInterval(() => {
-    if (document.getElementById("businessStatus") || document.getElementById("pharmacyStatus")) {
+    if (document.getElementById("businessStatus")) {
       SITE.applyHeader();
     }
   }, 60000);

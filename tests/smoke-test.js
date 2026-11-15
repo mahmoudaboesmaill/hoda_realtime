@@ -105,16 +105,16 @@ function checkDomElements(htmlFile, expectedIds, label) {
 
 // عناصر الهيدر المشتركة
 const headerIds = [
-  ["businessName", "pharmacyName"],
+  "businessName",
   "businessEnglishName",
-  ["businessTagline", "pharmacyTagline"],
-  ["businessStatus", "pharmacyStatus"]
+  "businessTagline",
+  "businessStatus"
 ];
 
 checkDomElements("index.html", [
   ...headerIds,
   "statusBadge",
-  ["whatsappOrderBtn", "rxBtn"],
+  "whatsappOrderBtn",
   "quickCall",
   "quickWa",
   "quickMap"
@@ -134,13 +134,13 @@ checkDomElements("contact.html", [
   "igTile",
   "tiktokTile",
   "mapsTile",
-  ["whatsappOrderBtn", "rxBtn"],
+  "whatsappOrderBtn",
   "addressText",
   "directionsBtn"
 ], "صفحة التواصل");
 
 checkDomElements("payment.html", [
-  ["businessName", "pharmacyName"],
+  "businessName",
   "businessEnglishName",
   "paymentCardsList",
   "toast",
@@ -292,6 +292,41 @@ if (vcfExists) {
   assert(vcfContent.includes("01009770070"), "يتضمن رقم الإدارة");
   assert(vcfContent.includes("PHOTO;ENCODING=b;TYPE=JPEG:"), "يتضمن صورة الشعار المعتمدة");
 }
+
+// --------------------------------------------------------------------
+// 9. فحص التنظيف التقني (عدم وجود بقايا الكود القديم غير المستخدم)
+// --------------------------------------------------------------------
+console.log("\n9. فحص نظافة الكود من الأسماء والدوال القديمة غير المستخدمة:");
+const cleanCheckFiles = [
+  "settings.js",
+  "site-common.js",
+  "index.js",
+  "contact.js",
+  "payment.js",
+  "analytics.js",
+  "index.html",
+  "contact.html",
+  "payment.html"
+];
+
+const legacyPatterns = [
+  { token: "PHARMACY", desc: "المتغير القديم PHARMACY" },
+  { token: "prescriptionMsg", desc: "الخاصية القديمة prescriptionMsg" },
+  { token: "escapeVCardValue", desc: "الدالة غير المستخدمة escapeVCardValue" },
+  { token: "pharmacyName", desc: "المعرف القديم pharmacyName" },
+  { token: "rxBtn", desc: "المعرف القديم rxBtn" }
+];
+
+legacyPatterns.forEach(({ token, desc }) => {
+  const foundIn = cleanCheckFiles.filter((file) =>
+    fs.readFileSync(file, "utf8").includes(token)
+  );
+  assert(
+    foundIn.length === 0,
+    `إزالة ${desc} بالكامل من ملفات المشروع`,
+    foundIn.length > 0 ? `موجود في: ${foundIn.join(", ")}` : ""
+  );
+});
 
 // --------------------------------------------------------------------
 // النتيجة النهائية

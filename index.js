@@ -2,13 +2,13 @@
 
 SITE.applyHeader();
 
-const config = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : (typeof PHARMACY !== "undefined" ? PHARMACY : {});
+const config = SITE.getConfig();
 
 const encodedMessage = encodeURIComponent(
-  config.whatsappMessage || config.prescriptionMsg || "السلام عليكم كنت حابب أستفسر عن"
+  config.whatsappMessage || "السلام عليكم كنت حابب أستفسر عن"
 );
 
-const whatsappBtn = document.getElementById("whatsappOrderBtn") || document.getElementById("rxBtn");
+const whatsappBtn = document.getElementById("whatsappOrderBtn");
 if (whatsappBtn && config.whatsapp) {
   whatsappBtn.href = `https://wa.me/${config.whatsapp}?text=${encodedMessage}`;
 }

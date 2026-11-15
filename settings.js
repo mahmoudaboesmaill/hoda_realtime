@@ -46,7 +46,6 @@ const SITE_CONFIG = {
 
   // الرسالة الجاهزة التي تظهر عند فتح واتساب
   whatsappMessage: "السلام عليكم كنت حابب أستفسر عن",
-  prescriptionMsg: "السلام عليكم كنت حابب أستفسر عن", // للتوافق العكسي مع الكود القديم
 
   // البريد الإلكتروني (إن وجد)
   email: "",
@@ -106,11 +105,8 @@ const SITE_CONFIG = {
       logo: "cib_bank_logo.png",
       appUrl: "intent://open#Intent;scheme=ipn;package=com.egyptianbanks.instapay;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.egyptianbanks.instapay;end",
       iosAppUrl: "ipn://open",
-      appStoreUrl: "https://apps.apple.com/eg/app/instapay-egypt/id1592109205",
+      appStoreUrl: "https://apps.apple.com/eg/app/instapay-egypt/id1592108795",
       playStoreUrl: "https://play.google.com/store/apps/details?id=com.egyptianbanks.instapay"
     }
   }
 };
-
-// للتوافق العكسي مع أي إشارات سابقة
-const PHARMACY = SITE_CONFIG;

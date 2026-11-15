@@ -1,8 +1,15 @@
 "use strict";
 
-SITE.applyHeader();
+if (typeof SITE !== "undefined" && typeof SITE.applyHeader === "function") {
+  SITE.applyHeader();
+}
 
-const config = typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG : (typeof PHARMACY !== "undefined" ? PHARMACY : {});
+const config =
+  typeof SITE !== "undefined" && typeof SITE.getConfig === "function"
+    ? SITE.getConfig()
+    : typeof SITE_CONFIG !== "undefined"
+    ? SITE_CONFIG
+    : {};
 const payments = config.payments || {};
 
 const paymentMethods = [
@@ -29,6 +36,7 @@ const paymentMethods = [
 ];
 
 let toastTimer;
+let activeCibCleanup = null;
 
 function showToast(message, duration = 3000) {
   const toast = document.getElementById("toast");
@@ -61,7 +69,7 @@ function fallbackCopy(text) {
 }
 
 async function writeToClipboard(text) {
-  if (navigator.clipboard && window.isSecureContext) {
+  if (typeof navigator !== "undefined" && navigator.clipboard && window.isSecureContext) {
     try {
       await navigator.clipboard.writeText(text);
       return true;
@@ -104,73 +112,435 @@ async function copyText(text, button, defaultLabel) {
 }
 
 /**
- * فحص نوع الجهاز لدعم فتح التطبيقات دون الاعتماد الكلي على user-agent فقط
+ * فحص نوع الجهاز والمنصة (Android / iOS / Desktop) بشكل معياري وقابل للاختبار
  */
-function getDeviceContext() {
-  const ua = navigator.userAgent || "";
+function getDeviceContext(env) {
+  const ua =
+    env && typeof env.userAgent === "string"
+      ? env.userAgent
+      : typeof navigator !== "undefined" && navigator.userAgent
+      ? navigator.userAgent
+      : "";
+  const platformName =
+    env && typeof env.platform === "string"
+      ? env.platform
+      : typeof navigator !== "undefined" && navigator.platform
+      ? navigator.platform
+      : "";
+  const maxTouchPoints =
+    env && typeof env.maxTouchPoints === "number"
+      ? env.maxTouchPoints
+      : typeof navigator !== "undefined" && typeof navigator.maxTouchPoints === "number"
+      ? navigator.maxTouchPoints
+      : 0;
+
   const isAndroid = /Android/i.test(ua);
   const isIOS =
     /iPad|iPhone|iPod/i.test(ua) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-  const isSmallScreen = window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
-  const isMobile = isAndroid || isIOS || (isTouch && isSmallScreen);
+    (platformName === "MacIntel" && maxTouchPoints > 1);
 
-  return { isAndroid, isIOS, isMobile };
+  const hasTouchStart =
+    env && typeof env.hasTouchStart === "boolean"
+      ? env.hasTouchStart
+      : typeof window !== "undefined" && "ontouchstart" in window;
+  const isTouch = hasTouchStart || maxTouchPoints > 0;
+
+  const isSmallScreen =
+    env && typeof env.isSmallScreen === "boolean"
+      ? env.isSmallScreen
+      : typeof window !== "undefined" &&
+        window.matchMedia &&
+        window.matchMedia("(max-width: 768px)").matches;
+
+  const isMobile = isAndroid || isIOS || Boolean(isTouch && isSmallScreen);
+  const platform = isAndroid ? "android" : isIOS ? "ios" : "desktop";
+
+  return { platform, isAndroid, isIOS, isMobile };
+}
+
+/**
+ * تحديد خطة التنقل والبديل لزر CIB InstaPay حسب المنصة
+ */
+function resolveCibNavigationPlan(payment, deviceContext) {
+  const ctx = deviceContext || getDeviceContext();
+  const safePayment = payment || {};
+  const appStoreUrl =
+    safePayment.appStoreUrl ||
+    "https://apps.apple.com/eg/app/instapay-egypt/id1592108795";
+  const playStoreUrl =
+    safePayment.playStoreUrl ||
+    "https://play.google.com/store/apps/details?id=com.egyptianbanks.instapay";
+
+  if (ctx.isAndroid) {
+    return {
+      platform: "android",
+      shouldNavigate: Boolean(safePayment.appUrl),
+      targetUrl: safePayment.appUrl || "",
+      fallbackStoreUrl: playStoreUrl,
+      playStoreUrl,
+      appStoreUrl,
+      requiresVisibilityCheck: false
+    };
+  }
+
+  if (ctx.isIOS) {
+    return {
+      platform: "ios",
+      shouldNavigate: true,
+      targetUrl: safePayment.iosAppUrl || "ipn://open",
+      fallbackStoreUrl: appStoreUrl,
+      playStoreUrl,
+      appStoreUrl,
+      requiresVisibilityCheck: true
+    };
+  }
+
+  return {
+    platform: "desktop",
+    shouldNavigate: false,
+    targetUrl: "",
+    fallbackStoreUrl: appStoreUrl,
+    playStoreUrl,
+    appStoreUrl,
+    requiresVisibilityCheck: false
+  };
+}
+
+/**
+ * إخفاء منطقة البديل التفاعلي داخل بطاقة الدفع
+ */
+function hideCibFallback(cardElement) {
+  if (!cardElement || typeof cardElement.querySelector !== "function") return;
+  const fallbackBox = cardElement.querySelector(".payment-fallback");
+  if (fallbackBox) {
+    fallbackBox.hidden = true;
+  }
+}
+
+/**
+ * عرض رسالة ثابتة وإجراء تفاعلي واضح وقابل للوصول بلوحة المفاتيح وقارئ الشاشة
+ */
+function renderCibFallback(cardElement, options = {}) {
+  if (!cardElement || typeof cardElement.querySelector !== "function") return null;
+
+  let fallbackBox = cardElement.querySelector(".payment-fallback");
+  const doc = cardElement.ownerDocument || (typeof document !== "undefined" ? document : null);
+
+  if (!fallbackBox && doc && typeof doc.createElement === "function") {
+    fallbackBox = doc.createElement("div");
+    fallbackBox.className = "payment-fallback";
+    fallbackBox.setAttribute("role", "region");
+    fallbackBox.setAttribute("aria-live", "polite");
+
+    const textP = doc.createElement("p");
+    textP.className = "payment-fallback-text";
+    const actionsDiv = doc.createElement("div");
+    actionsDiv.className = "payment-fallback-actions";
+
+    fallbackBox.appendChild(textP);
+    fallbackBox.appendChild(actionsDiv);
+    cardElement.appendChild(fallbackBox);
+  }
+
+  if (!fallbackBox) return null;
+
+  const textEl = fallbackBox.querySelector(".payment-fallback-text");
+  const actionsEl = fallbackBox.querySelector(".payment-fallback-actions");
+
+  const accountText = options.account ? ` (${options.account})` : "";
+  if (textEl) {
+    if (options.mode === "ios") {
+      textEl.textContent = options.copied
+        ? `تم نسخ رقم الحساب${accountText} ✓ — إذا لم يفتح تطبيق إنستاباي تلقائياً، يمكنك فتحه أو تنزيله من App Store:`
+        : `رقم الحساب${accountText} — تعذر فتح تطبيق إنستاباي تلقائياً، يمكنك فتحه أو تنزيله من App Store:`;
+    } else {
+      textEl.textContent = options.copied
+        ? `تم نسخ رقم الحساب${accountText} ✓ — تطبيق إنستاباي يعمل على الهواتف الذكية (Android و iOS):`
+        : `رقم الحساب${accountText} — تطبيق إنستاباي يعمل على الهواتف الذكية (يرجى نسخ الرقم يدوياً):`;
+    }
+  }
+
+  if (actionsEl && doc && typeof doc.createElement === "function") {
+    actionsEl.innerHTML = "";
+
+    if (options.mode === "ios" && options.appStoreUrl) {
+      const storeLink = doc.createElement("a");
+      storeLink.className = "btn btn-fallback-store";
+      storeLink.href = options.appStoreUrl;
+      storeLink.target = "_blank";
+      storeLink.rel = "noopener noreferrer";
+      storeLink.setAttribute("aria-label", "فتح أو تنزيل تطبيق إنستاباي من App Store");
+      storeLink.textContent = "فتح إنستاباي في App Store";
+      actionsEl.appendChild(storeLink);
+    } else if (options.mode === "desktop") {
+      if (options.playStoreUrl) {
+        const playLink = doc.createElement("a");
+        playLink.className = "btn btn-fallback-store";
+        playLink.href = options.playStoreUrl;
+        playLink.target = "_blank";
+        playLink.rel = "noopener noreferrer";
+        playLink.setAttribute("aria-label", "تنزيل تطبيق إنستاباي للأندرويد من Google Play");
+        playLink.textContent = "تطبيق إنستاباي (Google Play)";
+        actionsEl.appendChild(playLink);
+      }
+      if (options.appStoreUrl) {
+        const iosLink = doc.createElement("a");
+        iosLink.className = "btn btn-fallback-store";
+        iosLink.href = options.appStoreUrl;
+        iosLink.target = "_blank";
+        iosLink.rel = "noopener noreferrer";
+        iosLink.setAttribute("aria-label", "تنزيل تطبيق إنستاباي للآيفون من App Store");
+        iosLink.textContent = "تطبيق إنستاباي (App Store)";
+        actionsEl.appendChild(iosLink);
+      }
+    }
+  }
+
+  fallbackBox.hidden = false;
+  if (typeof fallbackBox.removeAttribute === "function") {
+    fallbackBox.removeAttribute("hidden");
+  }
+  return fallbackBox;
+}
+
+/**
+ * تنظيف أي مستمع أو مؤقت معلق لمحاولة فتح إنستاباي السابقة
+ */
+function cleanupActiveCibAttempt() {
+  if (typeof activeCibCleanup === "function") {
+    const fn = activeCibCleanup;
+    activeCibCleanup = null;
+    fn();
+  }
 }
 
 /**
  * معالجة زر فتح إنستاباي لحساب بنك CIB:
- * 1. نسخ رقم الحساب دائمًا.
- * 2. التعامل الذكي مع المنصات المختلفة (Android / iOS / Desktop).
- * 3. توفير رسائل توجيه وبدائل واضحة دون ترك المستخدم أمام روابط فاشلة.
+ * 1. استدعاء event.preventDefault() بشكل متزامن قبل أي await لمنع فتح intent بالخطأ.
+ * 2. نسخ رقم الحساب مع الحفاظ على fallback النسخ اليدوي.
+ * 3. تنفيذ التنقل المناسب يدويًا مرة واحدة فقط حسب المنصة (Android / iOS / Desktop).
+ * 4. تنظيف جميع مستمعات visibilitychange والمؤقتات بعد انتهاء المحاولة.
  */
-async function handleCibInstaPayClick(event, payment) {
-  const { isAndroid, isIOS, isMobile } = getDeviceContext();
-
-  // 1. نسخ رقم الحساب أولاً
-  if (payment.account) {
-    await writeToClipboard(payment.account);
+async function handleCibInstaPayClick(event, payment, options = {}) {
+  // 1. منع الانتقال الافتراضي بشكل متزامن قبل أي عملية غير متزامنة (await)
+  if (event && typeof event.preventDefault === "function") {
+    event.preventDefault();
   }
 
-  // 2. إذا كان المستخدم على جهاز سطح مكتب (Desktop)
-  if (!isMobile) {
-    event.preventDefault();
-    showToast(
-      `تم نسخ رقم الحساب (${payment.account}) ✓ — تطبيق إنستاباي متاح للهواتف (Android و iOS)`,
+  // تنظيف أي محاولة سابقة معلقة
+  cleanupActiveCibAttempt();
+
+  const safePayment = payment || {};
+  const deviceContext = options.deviceContext || getDeviceContext(options.env);
+  const plan = resolveCibNavigationPlan(safePayment, deviceContext);
+
+  const copyFn = options.copyFn || writeToClipboard;
+  const promptFn =
+    options.promptFn !== undefined
+      ? options.promptFn
+      : typeof window !== "undefined" && typeof window.prompt === "function"
+      ? (msg, val) => window.prompt(msg, val)
+      : null;
+  const navigate =
+    options.navigate ||
+    ((url) => {
+      window.location.href = url;
+    });
+  const notify = options.notify || showToast;
+  const doc =
+    options.document || (typeof document !== "undefined" ? document : null);
+  const setTimer =
+    options.setTimeout || ((fn, ms) => window.setTimeout(fn, ms));
+  const clearTimer =
+    options.clearTimeout || ((id) => window.clearTimeout(id));
+  const fallbackDelayMs =
+    typeof options.fallbackDelayMs === "number" ? options.fallbackDelayMs : 2000;
+  const cardElement =
+    options.cardElement ||
+    (event &&
+    event.currentTarget &&
+    typeof event.currentTarget.closest === "function"
+      ? event.currentTarget.closest(".payment-card")
+      : null);
+
+  // 2. نسخ رقم الحساب مع الحفاظ على البديل اليدوي دون كسر التنقل
+  let copied = false;
+  if (safePayment.account) {
+    try {
+      copied = Boolean(await copyFn(safePayment.account));
+    } catch (_err) {
+      copied = false;
+    }
+
+    if (!copied && typeof promptFn === "function") {
+      try {
+        promptFn("انسخ رقم الحساب يدوياً:", safePayment.account);
+      } catch (_promptErr) {
+        // تجاهل خطأ نافذة النسخ اليدوي
+      }
+    }
+  }
+
+  // 3. على سطح المكتب: لا نفتح intent أو ipn، ونعرض إرشادات واضحة مع روابط المتاجر الاختيارية
+  if (plan.platform === "desktop") {
+    renderCibFallback(cardElement, {
+      mode: "desktop",
+      account: safePayment.account,
+      copied,
+      appStoreUrl: plan.appStoreUrl,
+      playStoreUrl: plan.playStoreUrl
+    });
+
+    notify(
+      copied
+        ? `تم نسخ رقم الحساب (${safePayment.account}) ✓ — تطبيق إنستاباي متاح على الهاتف`
+        : `تطبيق إنستاباي متاح على الهاتف — يرجى نسخ رقم الحساب (${safePayment.account}) يدوياً`,
       4000
     );
-    return;
-  }
 
-  // 3. إذا كان جهاز أندرويد
-  if (isAndroid) {
-    showToast("تم نسخ رقم الحساب وجارٍ فتح إنستاباي... ✓", 2500);
-    // الرابط مهيأ مسبقاً كـ intent يحتوي على S.browser_fallback_url إلى متجر Google Play
-    return;
-  }
-
-  // 4. إذا كان جهاز iOS (آيفون / آيباد)
-  if (isIOS) {
-    event.preventDefault();
-    showToast("تم نسخ رقم الحساب وجارٍ فتح إنستاباي... ✓", 2500);
-
-    let appOpened = false;
-    const handleVisibility = () => {
-      if (document.hidden) appOpened = true;
+    return {
+      platform: "desktop",
+      copied,
+      navigated: false,
+      targetUrl: null
     };
-    document.addEventListener("visibilitychange", handleVisibility, { once: true });
+  }
 
-    // محاولة فتح التطبيق
-    window.location.href = payment.iosAppUrl || "ipn://open";
+  // 4. على أندرويد: نفتح رابط intent المهيأ مع S.browser_fallback_url لمتجر Google Play
+  if (plan.platform === "android") {
+    hideCibFallback(cardElement);
 
-    // بديل واضح في حالة عدم تثبيت التطبيق
-    window.setTimeout(() => {
-      document.removeEventListener("visibilitychange", handleVisibility);
-      if (!appOpened && !document.hidden) {
-        showToast("إذا لم يفتح التطبيق، يرجى التأكد من تثبيت إنستاباي من App Store", 4000);
-      }
-    }, 2000);
+    if (!plan.shouldNavigate || !plan.targetUrl) {
+      notify(
+        copied
+          ? "تم نسخ رقم الحساب ✓ — تعذر بدء فتح التطبيق"
+          : "تعذر نسخ رقم الحساب أو فتح التطبيق",
+        3500
+      );
+      return {
+        platform: "android",
+        copied,
+        navigated: false,
+        targetUrl: null
+      };
+    }
+
+    try {
+      navigate(plan.targetUrl);
+      notify(
+        copied
+          ? "تم نسخ رقم الحساب ✓ — جارٍ فتح تطبيق إنستاباي..."
+          : "تعذر النسخ التلقائي — جارٍ فتح تطبيق إنستاباي...",
+        2500
+      );
+      return {
+        platform: "android",
+        copied,
+        navigated: true,
+        targetUrl: plan.targetUrl
+      };
+    } catch (_navError) {
+      notify(
+        copied
+          ? "تم نسخ رقم الحساب ✓ — تعذر فتح تطبيق إنستاباي تلقائياً"
+          : "تعذر نسخ رقم الحساب وفتح تطبيق إنستاباي تلقائياً",
+        4000
+      );
+      return {
+        platform: "android",
+        copied,
+        navigated: false,
+        targetUrl: null
+      };
+    }
+  }
+
+  // 5. على iOS: نحاول فتح iosAppUrl، وإذا لم يفتح التطبيق نعرض رابطاً تفاعلياً ثابتاً لـ App Store
+  hideCibFallback(cardElement);
+
+  let appOpened = false;
+  let timerId = null;
+  let cleanedUp = false;
+
+  const handleVisibility = () => {
+    if (doc && doc.hidden) {
+      appOpened = true;
+      cleanup();
+    }
+  };
+
+  function cleanup() {
+    if (cleanedUp) return;
+    cleanedUp = true;
+    if (doc && typeof doc.removeEventListener === "function") {
+      doc.removeEventListener("visibilitychange", handleVisibility);
+    }
+    if (timerId !== null) {
+      clearTimer(timerId);
+      timerId = null;
+    }
+    if (activeCibCleanup === cleanup) {
+      activeCibCleanup = null;
+    }
+  }
+
+  if (doc && typeof doc.addEventListener === "function") {
+    doc.addEventListener("visibilitychange", handleVisibility);
+  }
+
+  timerId = setTimer(() => {
+    const isHidden = Boolean(doc && doc.hidden);
+    cleanup();
+    if (!appOpened && !isHidden) {
+      renderCibFallback(cardElement, {
+        mode: "ios",
+        account: safePayment.account,
+        copied,
+        appStoreUrl: plan.fallbackStoreUrl
+      });
+      notify(
+        "لم يفتح تطبيق إنستاباي تلقائياً — يمكنك فتحه أو تنزيله من App Store",
+        4000
+      );
+    }
+  }, fallbackDelayMs);
+
+  activeCibCleanup = cleanup;
+
+  try {
+    navigate(plan.targetUrl);
+    notify(
+      copied
+        ? "تم نسخ رقم الحساب ✓ — جارٍ محاولة فتح إنستاباي..."
+        : "تعذر النسخ التلقائي — جارٍ محاولة فتح إنستاباي...",
+      2500
+    );
+    return {
+      platform: "ios",
+      copied,
+      navigated: true,
+      targetUrl: plan.targetUrl,
+      cleanup
+    };
+  } catch (_navError) {
+    cleanup();
+    renderCibFallback(cardElement, {
+      mode: "ios",
+      account: safePayment.account,
+      copied,
+      appStoreUrl: plan.fallbackStoreUrl
+    });
+    notify(
+      "تعذر فتح تطبيق إنستاباي تلقائياً — يمكنك فتحه أو تنزيله من App Store",
+      4000
+    );
+    return {
+      platform: "ios",
+      copied,
+      navigated: false,
+      targetUrl: null,
+      cleanup
+    };
   }
 }
 
@@ -190,6 +560,7 @@ if (container && template) {
     }[payment.id] || "payment";
 
     const fragment = template.content.cloneNode(true);
+    const cardSection = fragment.querySelector(".payment-card");
     const logoBox = fragment.querySelector(".payment-logo");
     const logo = fragment.querySelector(".payment-logo img");
     const actions = fragment.querySelector(".payment-actions");
@@ -240,7 +611,9 @@ if (container && template) {
       }
 
       if (payment.id === "cibBank") {
-        appLink.addEventListener("click", (e) => handleCibInstaPayClick(e, payment));
+        appLink.addEventListener("click", (e) =>
+          handleCibInstaPayClick(e, payment, { cardElement: cardSection })
+        );
       }
     } else {
       if (appLink) appLink.remove();
